@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex h-[90vh] w-screen items-center justify-center">
+        <div class="flex h-1/2 flex-col">
+            <h1 class="my-5 text-3xl font-semibold sm:text-5xl ">Dziennik Szkolny</h1>
+            <form method="post">
+                {% if error %}
+                    <div class="text-red-600 font-bold text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.userIdentifier }}, <a
+                                href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <div class="flex flex-col-reverse">
+                    <input type="email" value="{{ last_username }}" name="_username" id="username"
+                           placeholder="Email Adress"
+                           class="peer ring-base-200 focus:border-base-100 shadow-base-400/10 placeholder:text-base-500 relative h-12 rounded-lg border-0 px-4 py-1 text-xs shadow-xl ring duration-500 outline-none placeholder:absolute placeholder:duration-500 focus:rounded-md focus:shadow-none focus:ring-2 focus:ring-blue-600 focus:placeholder:pt-10"
+                           type="text"/>
+                    <span class="text-base-500 mb-1 -translate-y-12 text-xs opacity-0 duration-500 peer-focus:translate-y-0 peer-focus:opacity-100">Email Adress</span>
+                </div>
+                <div class="flex flex-col-reverse mt-2">
+                    <input placeholder="Password"
+                           class="peer ring-base-200 focus:border-base-100 shadow-base-400/10 placeholder:text-base-500 relative h-12 rounded-lg border-0 px-4 py-1 text-xs shadow-xl ring duration-500 outline-none placeholder:absolute placeholder:duration-500 focus:rounded-md focus:shadow-none focus:ring-2 focus:ring-blue-600 focus:placeholder:pt-10"
+                           type="password" name="_password" id="password"/>
+                    <span class="text-base-500 mb-1 -translate-y-12 text-xs opacity-0 duration-500 peer-focus:translate-y-0 peer-focus:opacity-100">Password</span>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+                <div class="flex justify-center">
+                    <button class="my-3 w-[120px] h-[50px] text-xl self-center cursor-pointer rounded-full bg-blue-500 px-2 py-1 font-semibold text-white transition ease-in-out hover:scale-110 hover:shadow-md "
+                            type="submit">Zaloguj się
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

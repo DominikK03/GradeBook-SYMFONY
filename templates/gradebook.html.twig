@@ -1,0 +1,460 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex h-screen overflow-hidden">
+        {% include 'utils/_navbar.html.twig' %}
+
+        <div class="flex flex-col flex-1 overflow-hidden md:pl-64">
+            {% include 'utils/_topheader.html.twig' %}
+
+            <main class="flex-1 overflow-y-auto p-6"
+                  style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                <div class="bg-white rounded-lg shadow p-6 max-w-xs mx-auto text-center mb-6">
+                    {{ form_start(groupSelectionForm) }}
+
+                    <div class="mb-4">
+                        {{ form_widget(groupSelectionForm.group, {
+                            'attr': {
+                                'class': 'w-full p-2 border rounded'
+                            }
+                        }) }}
+                    </div>
+
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-500 text-white p-2 rounded-full mt-4 hover:bg-blue-600"
+                    >
+                        Wybierz klasę
+                    </button>
+
+                    {{ form_end(groupSelectionForm) }}
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6 overflow-x-auto ">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Imię i Nazwisko
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Kartkówka
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Sprawdzian
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Praca Domowa
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Projekt
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Średnia
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                        {% for studentData in students %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ studentData.student.person.lastName }} {{ studentData.student.person.firstName }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative group">
+                                    <div class="min-h-6 flex items-center justify-center">
+                                        {% if studentData.grades.QUIZ is defined %}
+                                            {% for grade in studentData.grades.QUIZ %}
+                                                <span class="ocena-badge relative cursor-pointer hover:bg-blue-100 px-2 py-1
+   rounded"
+                                                      onmouseenter="showTooltip(this)"
+                                                      onmouseleave="hideTooltip(this)"
+                                                      onclick="editGrade({{ grade.id }})"
+                                                      data-tooltip="Ocena: {{ grade.value }}|Data: {{ grade.date|date('d.m.Y') }}|Waga: {{ grade.wage }}|Nauczyciel: {{ grade.teacher.person.lastName }} {{ grade.teacher.person.firstName }}|Opis: {% if grade.description is empty %} Brak {% endif %} {{ grade.description }}">
+      {{ grade.value }}
+  </span>
+                                                {% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button class="ml-2 w-6 h-6 border-2
+  border-gray-400 text-gray-600 rounded-full flex items-center justify-center
+  text-sm hover:border-blue-500 hover:text-blue-500 transition-all
+  duration-200"
+                                                onclick="openGradeModal('{{ studentData.student.id }}',
+                                                        'kartkowka')">
+                                            +
+                                        </button>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative group">
+                                    <div class="min-h-6 flex items-center justify-center">
+                                        {% if studentData.grades.EXAM is defined %}
+                                            {% for grade in studentData.grades.EXAM %}
+                                                <span class="ocena-badge relative cursor-pointer hover:bg-blue-100 px-2 py-1
+   rounded"
+                                                      onmouseenter="showTooltip(this)"
+                                                      onmouseleave="hideTooltip(this)"
+                                                      onclick="editGrade({{ grade.id }})"
+                                                      data-tooltip="Ocena: {{ grade.value }}|Data: {{ grade.date|date('d.m.Y') }}|Waga: {{ grade.wage }}|Nauczyciel: {{ grade.teacher.person.lastName }} {{ grade.teacher.person.firstName }}|Opis: {% if grade.description is empty %} Brak {% endif %} {{ grade.description }}">
+      {{ grade.value }}
+  </span>
+                                                {% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button class="ml-2 w-6 h-6 border-2
+  border-gray-400 text-gray-600 rounded-full flex items-center justify-center
+  text-sm hover:border-blue-500 hover:text-blue-500 transition-all
+  duration-200"
+                                                onclick="openGradeModal('{{ studentData.student.id }}',
+                                                        'sprawdzian')">
+                                            +
+                                        </button>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative group">
+                                    <div class="min-h-6 flex items-center justify-center">
+                                        {% if studentData.grades.HOMEWORK is defined %}
+                                            {% for grade in studentData.grades.HOMEWORK %}
+                                                <span class="ocena-badge relative cursor-pointer hover:bg-blue-100 px-2 py-1
+   rounded"
+                                                      onmouseenter="showTooltip(this)"
+                                                      onmouseleave="hideTooltip(this)"
+                                                      onclick="editGrade({{ grade.id }})"
+                                                      data-tooltip="Ocena: {{ grade.value }}|Data: {{ grade.date|date('d.m.Y') }}|Waga: {{ grade.wage }}|Nauczyciel: {{ grade.teacher.person.lastName }} {{ grade.teacher.person.firstName }}|Opis: {% if grade.description is empty %} Brak {% endif %} {{ grade.description }}">
+      {{ grade.value }}
+  </span>
+                                                {% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button class="ml-2 w-6 h-6 border-2
+  border-gray-400 text-gray-600 rounded-full flex items-center justify-center
+  text-sm hover:border-blue-500 hover:text-blue-500 transition-all
+  duration-200"
+                                                onclick="openGradeModal('{{ studentData.student.id }}',
+                                                        'praca_domowa')">
+                                            +
+                                        </button>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative group">
+                                    <div class="min-h-6 flex items-center justify-center">
+                                        {% if studentData.grades.PROJECT is defined %}
+                                            {% for grade in studentData.grades.PROJECT %}
+                                                <span class="ocena-badge relative cursor-pointer hover:bg-blue-100 px-2 py-1
+   rounded"
+                                                      onmouseenter="showTooltip(this)"
+                                                      onmouseleave="hideTooltip(this)"
+                                                      onclick="editGrade({{ grade.id }})"
+                                                      data-tooltip="Ocena: {{ grade.value }}|Data: {{ grade.date|date('d.m.Y') }}|Waga: {{ grade.wage }}|Nauczyciel: {{ grade.teacher.person.lastName }} {{ grade.teacher.person.firstName }}|Opis: {% if grade.description is empty %} Brak {% endif %} {{ grade.description }}">
+      {{ grade.value }}
+  </span>
+                                                {% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button class="ml-2 w-6 h-6 border-2
+  border-gray-400 text-gray-600 rounded-full flex items-center justify-center
+  text-sm hover:border-blue-500 hover:text-blue-500 transition-all
+  duration-200"
+                                                onclick="openGradeModal('{{ studentData.student.id }}',
+                                                        'projekt')">
+                                            +
+                                        </button>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                     <span class="font-medium">
+      {% if studentData.weightedAverage is not null %}
+          {{ studentData.weightedAverage|number_format(2, ',', ' ') }}
+      {% else %}
+          <span class="text-gray-400">Brak ocen</span>
+      {% endif %}
+  </span>
+
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="6">
+                                    Brak studentów w tej grupie.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    
+    <div id="gradeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div id="modalContent"
+             class="bg-white rounded-lg shadow-2xl w-1/2 max-w-2xl transform -translate-y-10 opacity-0 transition-all duration-300 ease-out">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-gray-900" id="modalTitle">Dodaj Ocenę</h3>
+                    <button onclick="closeGradeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <form id="gradeForm" method="post" action="{{ path('app_grade_add') }}">
+                <div class="px-6 py-4 space-y-4">
+                    <div>
+                        <label for="grade_value" class="block text-sm font-medium text-gray-700 mb-1">Ocena</label>
+                        <input type="number" id="grade_value" name="grade[value]" min="1" max="6" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="Wprowadź ocenę (1-6)">
+                    </div>
+
+                    <div>
+                        <label for="grade_type" class="block text-sm font-medium text-gray-700 mb-1">Typ oceny</label>
+                        <select id="grade_type" name="grade[type]" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Wybierz typ oceny</option>
+                            <option value="HOMEWORK">Praca domowa</option>
+                            <option value="EXAM">Sprawdzian</option>
+                            <option value="PROJECT">Projekt</option>
+                            <option value="QUIZ">Kartkówka</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="grade_wage" class="block text-sm font-medium text-gray-700 mb-1">Waga oceny</label>
+                        <select id="grade_wage" name="grade[wage]" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Wybierz wagę</option>
+                            <option value="1">1 - Niska waga</option>
+                            <option value="2">2 - Średnia waga</option>
+                            <option value="3">3 - Wysoka waga</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="grade_student_display"
+                               class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+                        <input type="text" id="grade_student_display" readonly
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
+                               placeholder="Wybierz studenta">
+                        <input type="hidden" id="grade_student_id" name="grade[student_id]">
+                    </div>
+
+                    <div>
+                        <label for="grade_teacher_display" class="block text-sm font-medium text-gray-700 mb-1">Nauczyciel</label>
+                        <input type="text" id="grade_teacher_display" readonly
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
+                               value="{{ app.user.person ? app.user.person.firstName ~ ' ' ~ app.user.person.lastName : 'Brak danych' }}">
+                        <input type="hidden" id="grade_teacher_id" name="grade[teacher_id]"
+                               value="{{ app.user.teacher ? app.user.teacher.id : '' }}">
+                    </div>
+
+                    <div>
+                        <label for="grade_subject_display" class="block text-sm font-medium text-gray-700 mb-1">Przedmiot</label>
+                        <input type="text" id="grade_subject_display" readonly
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
+                               value="{{ app.user.teacher and app.user.teacher.specialization|length > 0 ? app.user.teacher.specialization[0].value|trans({}, 'subjects') : 'Brak specjalizacji' }}">
+                        <input type="hidden" id="grade_subject" name="grade[subject]"
+                               value="{{ app.user.teacher and app.user.teacher.specialization|length > 0 ? app.user.teacher.specialization[0].value : '' }}">
+                    </div>
+
+                    <div>
+                        <label for="grade_date_display"
+                               class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+                        <input type="text" id="grade_date_display" readonly
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+                        <input type="hidden" id="grade_date" name="grade[date]">
+                    </div>
+                    <div>
+                        <label for="grade_description" class="block text-sm font-medium
+  text-gray-700 mb-1">Opis oceny (opcjonalny)</label>
+                        <textarea id="grade_description" name="grade[description]" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md
+  shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+  focus:border-blue-500"
+                                  placeholder="Dodatkowe informacje o ocenie..."></textarea>
+                    </div>
+
+
+                    <input type="hidden" name="grade[_token]" value="{{ csrf_token('grade_form') }}">
+                </div>
+
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3 rounded-b-lg">
+                    <button type="button" onclick="closeGradeModal()"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                        Anuluj
+                    </button>
+                    <button type="submit" id="modalSubmit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                        Dodaj Ocenę
+                    </button>
+                    <button type="button" id="deleteButton" onclick="deleteGrade()"
+                            style="display:none;"
+                            class="px-4 py-2 text-sm font-medium text-white bg-red-500 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        Usuń Ocenę
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentGradeId = null;
+
+        function openGradeModal(studentId, gradeType) {
+            currentGradeId = null;
+            document.getElementById('gradeForm').action = '/grade/add';
+            const studentRow = document.querySelector(`button[onclick*="${studentId}"]`).closest('tr');
+            const studentName = studentRow.querySelector('td').textContent.trim();
+
+            document.getElementById('grade_student_id').value = studentId;
+            document.getElementById('grade_student_display').value = studentName;
+            document.getElementById('deleteButton').style.display = 'none';
+
+
+            const today = new Date();
+            const dateString = today.toLocaleDateString('pl-PL');
+            document.getElementById('grade_date').value = today.toISOString().split('T')[0];
+            document.getElementById('grade_date_display').value = dateString;
+
+            const gradeTypeMap = {
+                'kartkowka': 'QUIZ',
+                'sprawdzian': 'EXAM',
+                'praca_domowa': 'HOMEWORK',
+                'projekt': 'PROJECT'
+            };
+
+            if (gradeTypeMap[gradeType]) {
+                document.getElementById('grade_type').value = gradeTypeMap[gradeType];
+            }
+
+            const modal = document.getElementById('gradeModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modal.classList.remove('hidden');
+
+            setTimeout(() => {
+                modalContent.classList.remove('-translate-y-10', 'opacity-0');
+                modalContent.classList.add('translate-y-0', 'opacity-100');
+            }, 10);
+        }
+
+        function closeGradeModal() {
+            const modal = document.getElementById('gradeModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.classList.add('-translate-y-10', 'opacity-0');
+            modalContent.classList.remove('translate-y-0', 'opacity-100');
+
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('gradeForm').reset();
+                document.getElementById('grade_student_display').value = '';
+                document.getElementById('grade_date_display').value = '';
+                document.getElementById('modalTitle').textContent = 'Dodaj Ocenę';
+                document.getElementById('modalSubmit').textContent = 'Dodaj Ocenę';
+            }, 300);
+        }
+
+        document.getElementById('gradeModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeGradeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('gradeModal');
+                if (!modal.classList.contains('hidden')) {
+                    closeGradeModal();
+                }
+            }
+        });
+
+        function showTooltip(element) {
+            const tooltipData = element.getAttribute('data-tooltip').split('|');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute bg-white border-4 border-gray-800 shadow-lg text-gray-800 text-sm rounded-lg py-3 px-4 bottom-full left-1/2 transform -translate-x-1/2 mb-2 min-w-max z-50';
+            tooltip.innerHTML = tooltipData.map(line => `<div class="mb-1 last:mb-0">${line}</div>`).join('');
+
+            const arrow = document.createElement('div');
+            arrow.className = 'absolute top-full left-1/2 transform -translate-x-1/2 border-8 border-transparent border-t-gray-800';
+            tooltip.appendChild(arrow);
+
+            element.appendChild(tooltip);
+        }
+
+
+        function hideTooltip(element) {
+            const tooltip = element.querySelector('div');
+            if (tooltip) tooltip.remove();
+        }
+
+        function editGrade(gradeId) {
+            currentGradeId = gradeId;
+            fetch(`/grade/${gradeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("Error: " + data.error);
+                        return;
+                    }
+
+                    document.getElementById('grade_value').value = data.value;
+                    document.getElementById('grade_type').value = data.type;
+                    document.getElementById('grade_wage').value = data.wage;
+                    document.getElementById('grade_description').value = data.description || '';
+                    document.getElementById('grade_student_id').value = data.student_id;
+                    document.getElementById('grade_student_display').value = data.student_display;
+                    document.getElementById('grade_date').value = data.date;
+                    document.getElementById('grade_date_display').value = new Date(data.date).toLocaleDateString('pl-PL');
+
+                    document.getElementById('modalTitle').textContent = 'Edytuj Ocenę';
+                    document.getElementById('modalSubmit').textContent = 'Edytuj Ocenę';
+                    document.getElementById('deleteButton').style.display = 'inline-block';
+                    document.getElementById('gradeForm').action = `/grade/${gradeId}/edit`;
+
+                    const modal = document.getElementById('gradeModal');
+                    const modalContent = document.getElementById('modalContent');
+                    modal.classList.remove('hidden');
+                    setTimeout(() => {
+                        modalContent.classList.remove('-translate-y-10', 'opacity-0');
+                        modalContent.classList.add('translate-y-0', 'opacity-100');
+                    }, 10);
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
+                    alert("Wystąpił błąd podczas pobierania danych oceny");
+                })
+        }
+
+        function deleteGrade() {
+            if (!currentGradeId || !confirm("Czy napewno chcesz usunąć tę ocenę?")) {
+                return;
+            }
+            fetch(`/grade/${currentGradeId}/delete`, {method: 'DELETE'})
+                .then(() => {
+                    alert('Ocena została usunięta');
+                    closeGradeModal();
+                    location.reload();
+                })
+                .catch(error => {
+                    alert("Błąd podczas usuwania oceny");
+                })
+        }
+    </script>
+{% endblock %}

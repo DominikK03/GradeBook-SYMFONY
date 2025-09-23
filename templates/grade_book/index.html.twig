@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-primary-700 text-white">
+                <div class="flex items-center justify-center h-16 px-4 border-b border-primary-600">
+                    <h1 class="text-xl font-bold">
+                        <i class="fas fa-book-open mr-2"></i>
+                        eDziennik
+                    </h1>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4">
+                    <nav class="flex-1 space-y-1" id="teacher-menu">
+                        
+                    </nav>
+                </div>
+                <div class="p-4 border-t border-primary-600" id="teacher-profile">
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="flex flex-col flex-1 overflow-hidden">
+            
+            <header class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+                <div class="flex items-center">
+                    <button class="md:hidden p-2 rounded-md text-gray-500 hover:bg-gray-100" id="mobile-menu-button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="relative ml-2">
+                        <select class="appearance-none bg-transparent border-0 text-gray-700 font-medium focus:outline-none focus:ring-0" id="class-selector">
+                            
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 relative" id="notifications-button">
+                        <i class="fas fa-bell"></i>
+                        <span class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" id="notification-badge"></span>
+                    </button>
+                    <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 relative" id="messages-button">
+                        <i class="fas fa-envelope"></i>
+                        <span class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" id="message-badge"></span>
+                    </button>
+                    <div class="relative" id="user-profile-button">
+                        
+                    </div>
+                </div>
+            </header>
+
+            
+            <main class="flex-1 overflow-auto p-4 bg-gray-50" id="main-content">
+                
+
+                
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    
+                    <div class="border-b border-gray-200">
+                        <nav class="flex -mb-px" id="journal-tabs">
+                            
+                        </nav>
+                    </div>
+
+                    
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between" id="journal-controls">
+                            
+                        </div>
+                    </div>
+
+                    
+                    <div class="overflow-x-auto" id="journal-data-container">
+                        
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    
+    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="add-grade-modal">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            
+        </div>
+    </div>
+{% endblock %}

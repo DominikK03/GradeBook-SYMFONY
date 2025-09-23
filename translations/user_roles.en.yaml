@@ -1,0 +1,4 @@
+ROLE_TEACHER: 'Teacher'
+ROLE_STUDENT: 'Student'
+ROLE_PARENT: 'Parent'
+ROLE_ADMIN: 'Administrator'

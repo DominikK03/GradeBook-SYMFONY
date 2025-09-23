@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex h-screen overflow-hidden">
+        {% include 'utils/_navbar.html.twig' %}
+
+        
+        <div class="flex flex-col flex-1 overflow-hidden md:pl-64">            
+            {% include 'utils/_topheader.html.twig' %}
+
+            
+            <main class="flex-1 overflow-y-auto p-6" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                            {% if userData is not null %}
+                                <h1 class="text-2xl font-bold text-gray-800">Witaj {{ userData.firstName }}!</h1>
+                            {% endif %}
+                            <p class="text-gray-600">Oto przegląd Twojego dziennika</p>
+                        </div>
+                        <div class="mt-4 md:mt-0">
+                        <span class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium">
+                            Rok szkolny {{ "now"|date("Y") }}/{{ "now +1 year"|date("Y") }}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Dzisiejszy plan lekcji</h3>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock %}

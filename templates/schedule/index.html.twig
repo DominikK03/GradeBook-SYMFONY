@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex h-screen overflow-hidden">
+        {% include 'utils/_navbar.html.twig' %}
+
+        <div class="flex flex-col flex-1 overflow-hidden md:pl-64">
+            {% include 'utils/_topheader.html.twig' %}
+
+            <main class="flex-1 overflow-y-auto p-6"
+                  style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+
+                <div class="bg-white rounded-lg shadow p-4 sm:p-6 overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300 table-fixed">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-1 sm:px-2 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300" 
+                                style="width: 70px;">
+                                <span class="hidden sm:inline whitespace-nowrap">Godzina</span>
+                                <span class="sm:hidden whitespace-nowrap">Godz.</span>
+                            </th>
+                            <th scope="col"
+                                class="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">
+                                <span class="hidden sm:inline">Poniedziałek</span>
+                                <span class="sm:hidden">Pon</span>
+                            </th>
+                            <th scope="col"
+                                class="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">
+                                <span class="hidden sm:inline">Wtorek</span>
+                                <span class="sm:hidden">Wt</span>
+                            </th>
+                            <th scope="col"
+                                class="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">
+                                <span class="hidden sm:inline">Środa</span>
+                                <span class="sm:hidden">Śr</span>
+                            </th>
+                            <th scope="col"
+                                class="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">
+                                <span class="hidden sm:inline">Czwartek</span>
+                                <span class="sm:hidden">Czw</span>
+                            </th>
+                            <th scope="col"
+                                class="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">
+                                <span class="hidden sm:inline">Piątek</span>
+                                <span class="sm:hidden">Pt</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        {% set timeSlots = [
+                            {start: '08:00', end: '08:45'},
+                            {start: '09:00', end: '09:45'},
+                            {start: '10:00', end: '10:45'},
+                            {start: '11:00', end: '11:45'},
+                            {start: '12:00', end: '12:45'},
+                            {start: '13:00', end: '13:45'},
+                            {start: '14:00', end: '14:45'},
+                            {start: '15:00', end: '15:45'}
+                        ] %}
+                        
+                        {% for timeSlot in timeSlots %}
+                            <tr>
+                                <td class="px-1 sm:px-2 py-2 sm:py-4 text-sm font-medium text-gray-900 border border-gray-300 bg-gray-50">
+                                    <span class="whitespace-nowrap text-xs">{{ timeSlot.start }}-{{ timeSlot.end }}</span>
+                                </td>
+                                {% for day in 1..5 %}
+                                    <td class="px-1 sm:px-2 lg:px-4 py-2 sm:py-4 text-sm text-gray-500 relative border border-gray-300">
+                                        <div class="min-h-6">
+                                            {% if scheduleData[day] is defined and scheduleData[day][timeSlot.start] is defined %}
+                                                {% for lesson in scheduleData[day][timeSlot.start] %}
+                                                    <div class="lesson-card bg-blue-50 border border-blue-200 rounded-lg p-1 sm:p-2 mb-1 text-xs">
+                                                        <div class="font-semibold text-green-800 mb-1 text-xs sm:text-sm">
+                                                            {{ lesson.subject.value|trans({}, 'subjects') }}
+                                                        </div>
+                                                        <div class="text-gray-600 text-xs hidden sm:block">
+                                                            Sala: {{ lesson.classroom.value }}
+                                                        </div>
+                                                        <div class="text-gray-600 text-xs sm:block hidden lg:block">
+                                                            <span class="hidden sm:inline">{{ lesson.teacher.person.firstName }} {{ lesson.teacher.person.lastName }}</span>
+                                                        </div>
+                                                        <div class="text-gray-500 text-xs sm:hidden">
+                                                            {{ lesson.classroom.value }}
+                                                        </div>
+                                                        <div class="text-gray-500 text-xs hidden sm:block">
+                                                            {{ lesson.startTime|date('H:i') }}-{{ lesson.endTime|date('H:i') }}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+{% endblock %}

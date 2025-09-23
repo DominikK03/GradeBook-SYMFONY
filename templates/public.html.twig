@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class='h-screen w-screen flex flex-col justify-center items-center'>
+        <img class="w-1/2 rounded-full" src="{{ asset('images/logo.png') }}" alt="">
+        <h1 class="text-center text-5xl font-bold mb-5">Dziennik Szkolny</h1>
+        <button onclick="window.location.href='{{ path('app_login') }}'"
+                class="bg-blue-500  font-semibold text-white py-2 px-6 rounded-full cursor-pointer transition-all duration-300 shadow-md font-medium uppercase tracking-wider hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-lg">
+            Zaloguj się
+        </button>
+    </div>
+{% endblock %}

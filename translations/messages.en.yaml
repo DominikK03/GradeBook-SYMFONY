@@ -1,0 +1,8 @@
+navigation:
+    homepage: "Homepage"
+    homework: "Homework"
+    my_grades: "My Grades"
+    profile: "Profile"
+    schedule: "Schedule"
+    gradebook: "Gradebook"
+    access_denied: "Access Denied"

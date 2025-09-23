@@ -1,0 +1,8 @@
+navigation:
+    homepage: "Strona Główna"
+    homework: "Zadania Domowe"
+    my_grades: "Moje Oceny"
+    profile: "Profil"
+    schedule: "Plan Zajęć"
+    gradebook: "Dziennik"
+    access_denied: "Dostęp Zabroniony"
